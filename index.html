@@ -3,114 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- サイトのタイトルを編集 -->
-    <title>ロメダ - 公式サイト</title>
-    
+    <title>&ROMEDA - 公式サイト</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #111827; /* gray-900 */
+            color: #d1d5db; /* gray-300 */
         }
         .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            background: linear-gradient(135deg, #2dd4bf, #06b6d4);
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(31, 41, 55, 0.5); /* gray-800 with opacity */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(45, 212, 191, 0.2);
         }
+        .nav-link.active {
+            color: #2dd4bf; /* cyan-400 */
+            font-weight: 700;
+        }
+
+        /* --- 背景画像セクション --- */
+        .hero-section {
+            position: relative;
+            padding: 8rem 1rem;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background-image: url('https://i.imgur.com/oHYNXuX.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* 黒のオーバーレイ */
+            z-index: 1;
+        }
+        .hero-section > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- アニメーション関連のスタイル --- */
+        #initial-load-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 200;
+            pointer-events: none;
+        }
+        #initial-load-overlay .panel {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: #000;
+            transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        #initial-load-overlay .panel.left { left: 0; }
+        #initial-load-overlay .panel.right { right: 0; }
+        
+        body.is-loaded #initial-load-overlay .panel.left {
+            transform: translateX(-100%);
+        }
+        body.is-loaded #initial-load-overlay .panel.right {
+            transform: translateX(100%);
+        }
+
+        #transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #111827; /* gray-900 */
+            z-index: 40; /* ヘッダー(z-50)より下 */
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.76, 0, 0.24, 1), transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        .page.is-visible .fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .page.is-visible .delay-1 { transition-delay: 0.1s; }
+        .page.is-visible .delay-2 { transition-delay: 0.2s; }
+        .page.is-visible .delay-3 { transition-delay: 0.3s; }
+        .page.is-visible .delay-4 { transition-delay: 0.4s; }
+        .page.is-visible .delay-5 { transition-delay: 0.5s; }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="text-gray-300">
+
+    <div id="initial-load-overlay">
+        <div class="panel left"></div>
+        <div class="panel right"></div>
+    </div>
+    <div id="transition-overlay"></div>
 
     <!-- ヘッダー -->
-    <header class="p-4">
+    <header class="p-4 sticky top-0 z-50 glass-card">
         <div class="container mx-auto flex justify-between items-center">
-            <!-- サーバー名を編集 -->
-            <h1 class="text-2xl font-bold">ロメダ</h1>
-            <!-- Discord招待リンクをここに貼り付け -->
-            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                サーバーに参加
+            <h1 class="text-2xl font-bold text-white">&ROMEDA</h1>
+            <nav id="main-nav" class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-link active text-gray-300 hover:text-cyan-400 transition duration-300" data-page="home">HOME</a>
+                <a href="#" class="nav-link text-gray-300 hover:text-cyan-400 transition duration-300" data-page="events">EVENTS</a>
+                <a href="#" class="nav-link text-gray-300 hover:text-cyan-400 transition duration-300" data-page="members">MEMBERS</a>
+                <a href="https://www.youtube.com/@romeda0225/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition duration-300">YOUTUBE</a>
+                <a href="https://romedadb.notion.site/homepage" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition duration-300">WIKI</a>
+                <a href="https://x.com/romeda_0225" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition duration-300">TWITTER</a>
+            </nav>
+            <a href="https://discord.gg/gnKmAPddN6" target="_blank" rel="noopener noreferrer" class="bg-cyan-500 hover:bg-cyan-600 text-black font-bold py-2 px-4 rounded-lg transition duration-300">
+                JOIN
             </a>
         </div>
     </header>
 
-    <!-- メインセクション -->
-    <main class="container mx-auto px-4 py-16 text-center">
-        <!-- サーバーのロゴやメイン画像をここに配置 (任意) -->
-        <!-- <img src="your-logo.png" alt="Server Logo" class="mx-auto mb-8 w-32 h-32 rounded-full"> -->
+    <!-- ページコンテナ -->
+    <main class="container mx-auto px-4 py-16">
         
-        <!-- サーバー名を編集 -->
-        <h2 class="text-5xl md:text-7xl font-black mb-4">ようこそ、ロメダへ</h2>
+        <section id="home" class="page">
+            <div class="hero-section text-center">
+                <h2 class="text-5xl md:text-7xl font-black text-white mb-4 fade-in-up delay-1">ようこそ、&ROMEDAへ</h2>
+                <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-8 fade-in-up delay-2">
+                    ここは、ゲーム、雑談、趣味など、好きなことを共有できるコミュニティです。新しい仲間を見つけて、毎日をもっと楽しく過ごしましょう。
+                </p>
+                <a href="https://discord.gg/gnKmAPddN6" target="_blank" rel="noopener noreferrer" class="gradient-bg text-black font-bold py-4 px-8 rounded-full text-xl hover:opacity-90 transition duration-300 transform hover:scale-105 inline-block fade-in-up delay-3">
+                    今すぐ参加する！
+                </a>
+            </div>
+            <div class="mt-20">
+                <h3 class="text-4xl font-bold text-center text-white mb-12 fade-in-up delay-2">About &ROMEDA</h3>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-gray-800 p-8 rounded-2xl fade-in-up delay-3">
+                        <h4 class="text-2xl font-bold text-white mb-2">活発なコミュニティ</h4>
+                        <p class="text-gray-400">毎日たくさんのメンバーがオンラインで、いつでも会話に参加できます。</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-2xl fade-in-up delay-4">
+                        <h4 class="text-2xl font-bold text-white mb-2">多彩なチャンネル</h4>
+                        <p class="text-gray-400">趣味やゲームごとに専門チャンネルがあり、共通の話題で盛り上がれます。</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-2xl fade-in-up delay-5">
+                        <h4 class="text-2xl font-bold text-white mb-2">定期的なイベント</h4>
+                        <p class="text-gray-400">ゲーム大会や映画鑑賞会など、楽しいイベントを定期的に開催しています。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-20 md:flex items-center justify-center gap-12">
+                <div class="md:w-1/2 mb-8 md:mb-0 max-w-md fade-in-up delay-3">
+                    <h3 class="text-4xl font-bold text-white mb-6">Rules</h3>
+                    <p class="text-gray-400 mb-6">みんなが快適に過ごせるように、以下の基本的なルールを守ってください。</p>
+                    <ul class="space-y-4">
+                        <li class="bg-gray-800 p-4 rounded-lg"><strong>1. 敬意を払う:</strong> 他のメンバーに対する敬意を忘れず、誹謗中傷や嫌がらせは禁止です。</li>
+                        <li class="bg-gray-800 p-4 rounded-lg"><strong>2. 適切なチャンネルを利用する:</strong> 話題に合ったチャンネルで発言してください。</li>
+                        <li class="bg-gray-800 p-4 rounded-lg"><strong>3. スパム行為の禁止:</strong> 無意味な連投や過度なメンションは控えてください。</li>
+                        <li class="bg-gray-800 p-4 rounded-lg"><strong>4. NSFWコンテンツの禁止:</strong> 全年齢対象のサーバーです。不適切なコンテンツの投稿は禁止です。</li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 flex justify-center fade-in-up delay-4">
+                    <iframe src="https://discord.com/widget?id=1369623216728965160&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="page hidden">
+            <h3 class="text-4xl font-bold text-center text-white mb-12 fade-in-up delay-1">Events & Timeline</h3>
+            <div class="flex justify-center fade-in-up delay-2">
+                 <a class="twitter-timeline" data-height="800" data-theme="dark" href="https://twitter.com/romeda_0225?ref_src=twsrc%5Etfw">Tweets by romeda_0225</a>
+            </div>
+        </section>
         
-        <!-- サーバーのキャッチコピーや簡単な説明を編集 -->
-        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-            ここは、ゲーム、雑談、趣味など、好きなことを共有できるコミュニティです。新しい仲間を見つけて、毎日をもっと楽しく過ごしましょう。
-        </p>
-        
-        <!-- Discord招待リンクをここに貼り付け -->
-        <a href="#" class="gradient-bg text-white font-bold py-4 px-8 rounded-full text-xl hover:opacity-90 transition duration-300 transform hover:scale-105">
-            今すぐ参加する！
-        </a>
+        <section id="members" class="page hidden">
+            <h3 class="text-4xl font-bold text-center text-white mb-12 fade-in-up delay-1">Members</h3>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-2xl text-center flex flex-col items-center fade-in-up delay-2">
+                    <img class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-cyan-400" src="https://i.imgur.com/TK7MAhu.png" alt="ドリョコンのアイコン">
+                    <h4 class="text-xl font-bold text-white">ドリョコン</h4>
+                    <p class="text-cyan-400 font-semibold mb-2">OWNER</p>
+                    <p class="text-gray-300 mb-4">&ROMEDAの創設者、鯖主。</p>
+                    <a href="https://x.com/sundaysiesta5" target="_blank" rel="noopener noreferrer" class="inline-flex items-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 mt-auto">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg>
+                        Twitter
+                    </a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- サーバー紹介セクション -->
-    <section id="about" class="py-20 bg-gray-800/50">
-        <div class="container mx-auto px-4">
-            <h3 class="text-4xl font-bold text-center mb-12">サーバーの特長</h3>
-            <div class="grid md:grid-cols-3 gap-8 text-center">
-                <!-- 特長1を編集 -->
-                <div class="glass-card p-8 rounded-2xl">
-                    <h4 class="text-2xl font-bold mb-2">活発なコミュニティ</h4>
-                    <p class="text-gray-400">毎日たくさんのメンバーがオンラインで、いつでも会話に参加できます。</p>
-                </div>
-                <!-- 特長2を編集 -->
-                <div class="glass-card p-8 rounded-2xl">
-                    <h4 class="text-2xl font-bold mb-2">多彩なチャンネル</h4>
-                    <p class="text-gray-400">趣味やゲームごとに専門チャンネルがあり、共通の話題で盛り上がれます。</p>
-                </div>
-                <!-- 特長3を編集 -->
-                <div class="glass-card p-8 rounded-2xl">
-                    <h4 class="text-2xl font-bold mb-2">定期的なイベント</h4>
-                    <p class="text-gray-400">ゲーム大会や映画鑑賞会など、楽しいイベントを定期的に開催しています。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ルールセクション -->
-    <section id="rules" class="py-20">
-        <div class="container mx-auto px-4 md:flex items-center gap-12">
-            <div class="md:w-1/2 mb-8 md:mb-0">
-                <h3 class="text-4xl font-bold mb-6">サーバーのルール</h3>
-                <p class="text-gray-400 mb-6">
-                    みんなが快適に過ごせるように、以下の基本的なルールを守ってください。詳細はサーバー内のルールチャンネルを確認してください。
-                </p>
-                <!-- Discordウィジェットをここに埋め込む -->
-                <!-- Discordのサーバー設定 > ウィジェットでコードをコピーして貼り付けてください -->
-                <div class="w-full h-96 bg-gray-800 rounded-lg flex items-center justify-center">
-                    <p class="text-gray-500">ここにDiscordウィジェットを埋め込みます</p>
-                </div>
-            </div>
-            <div class="md:w-1/2">
-                <ul class="space-y-4">
-                    <!-- ルールを編集 -->
-                    <li class="glass-card p-4 rounded-lg"><strong>1. 敬意を払う:</strong> 他のメンバーに対する敬意を忘れず、誹謗中傷や嫌がらせは禁止です。</li>
-                    <li class="glass-card p-4 rounded-lg"><strong>2. 適切なチャンネルを利用する:</strong> 話題に合ったチャンネルで発言してください。</li>
-                    <li class="glass-card p-4 rounded-lg"><strong>3. スパム行為の禁止:</strong> 無意味な連投や過度なメンションは控えてください。</li>
-                    <li class="glass-card p-4 rounded-lg"><strong>4. NSFWコンテンツの禁止:</strong> 全年齢対象のサーバーです。不適切なコンテンツの投稿は禁止です。</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- フッター -->
-    <footer class="bg-gray-900/80 py-6 text-center text-gray-500">
-        <!-- サーバー名を編集 -->
-        <p>&copy; 2025 ロメダ. All Rights Reserved.</p>
+    <footer class="bg-black py-6 text-center text-gray-600">
+        <p>&copy; 2025 &ROMEDA. All Rights Reserved.</p>
     </footer>
+
+<script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const pages = document.querySelectorAll('.page');
+    const transitionOverlay = document.getElementById('transition-overlay');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.body.classList.add('is-loaded');
+            const initialPage = document.getElementById('home');
+            initialPage.classList.add('is-visible');
+        }, 500);
+    });
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            const targetPage = document.getElementById(pageId);
+
+            if (targetPage.classList.contains('is-visible')) return;
+            
+            transitionOverlay.style.transform = 'translateY(0%)';
+
+            setTimeout(() => {
+                pages.forEach(page => {
+                    page.classList.add('hidden');
+                    page.classList.remove('is-visible');
+                });
+
+                targetPage.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    targetPage.classList.add('is-visible');
+                }, 50);
+
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+
+                transitionOverlay.style.transform = 'translateY(-100%)';
+
+                setTimeout(() => {
+                    transitionOverlay.style.transition = 'none';
+                    transitionOverlay.style.transform = 'translateY(100%)';
+                    setTimeout(() => {
+                        transitionOverlay.style.transition = 'transform 0.5s cubic-bezier(0.76, 0, 0.24, 1)';
+                    }, 50);
+                }, 500);
+
+            }, 500);
+        });
+    });
+</script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 </body>
 </html>
