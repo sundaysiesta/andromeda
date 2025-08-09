@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>&ROMEDA - 公式サイト</title>
+
+    <!-- ▼▼▼ 埋め込み表示用のメタタグ (ここから) ▼▼▼ -->
+    <meta name="description" content="ゲーム、雑談、趣味など、好きなことを共有できるコミュニティ「&ROMEDA」の公式サイトです。">
+    <meta property="og:title" content="&ROMEDA - 公式サイト">
+    <meta property="og:description" content="ゲーム、雑談、趣味など、好きなことを共有できるコミュニティ「&ROMEDA」の公式サイトです。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sundaysiesta.github.io/"> 
+    <meta property="og:image" content="https://i.imgur.com/oHYNXuX.png"> 
+    <meta property="og:site_name" content="&ROMEDA">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- ▲▲▲ 埋め込み表示用のメタタグ (ここまで) ▲▲▲ -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
@@ -24,8 +36,6 @@
             color: #2dd4bf; /* cyan-400 */
             font-weight: 700;
         }
-
-        /* --- 背景画像セクション --- */
         .hero-section {
             position: relative;
             padding: 8rem 1rem;
@@ -42,15 +52,13 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6); /* 黒のオーバーレイ */
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 1;
         }
         .hero-section > * {
             position: relative;
             z-index: 2;
         }
-
-        /* --- アニメーション関連のスタイル --- */
         #initial-load-overlay {
             position: fixed;
             top: 0;
@@ -70,26 +78,23 @@
         }
         #initial-load-overlay .panel.left { left: 0; }
         #initial-load-overlay .panel.right { right: 0; }
-        
         body.is-loaded #initial-load-overlay .panel.left {
             transform: translateX(-100%);
         }
         body.is-loaded #initial-load-overlay .panel.right {
             transform: translateX(100%);
         }
-
         #transition-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #111827; /* gray-900 */
-            z-index: 40; /* ヘッダー(z-50)より下 */
+            background-color: #111827;
+            z-index: 40;
             transform: translateY(100%);
             transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
         }
-
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
@@ -99,7 +104,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
         .page.is-visible .delay-1 { transition-delay: 0.1s; }
         .page.is-visible .delay-2 { transition-delay: 0.2s; }
         .page.is-visible .delay-3 { transition-delay: 0.3s; }
@@ -119,7 +123,8 @@
     <header class="p-4 sticky top-0 z-50 glass-card">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold text-white">&ROMEDA</h1>
-            <nav id="main-nav" class="hidden md:flex items-center space-x-6">
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-6">
                 <a href="#" class="nav-link active text-gray-300 hover:text-cyan-400 transition duration-300" data-page="home">HOME</a>
                 <a href="#" class="nav-link text-gray-300 hover:text-cyan-400 transition duration-300" data-page="events">EVENTS</a>
                 <a href="#" class="nav-link text-gray-300 hover:text-cyan-400 transition duration-300" data-page="members">MEMBERS</a>
@@ -127,11 +132,46 @@
                 <a href="https://romedadb.notion.site/homepage" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition duration-300">WIKI</a>
                 <a href="https://x.com/romeda_0225" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-cyan-400 transition duration-300">TWITTER</a>
             </nav>
-            <a href="https://discord.gg/gnKmAPddN6" target="_blank" rel="noopener noreferrer" class="bg-cyan-500 hover:bg-cyan-600 text-black font-bold py-2 px-4 rounded-lg transition duration-300">
+            <a href="https://discord.gg/gnKmAPddN6" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block bg-cyan-500 hover:bg-cyan-600 text-black font-bold py-2 px-4 rounded-lg transition duration-300">
                 JOIN
             </a>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-open-btn" class="md:hidden p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none">
+                <span class="sr-only">Open main menu</span>
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-[100]">
+        <div class="fixed inset-0 bg-black bg-opacity-75" aria-hidden="true"></div>
+        <div class="fixed top-0 right-0 max-w-xs w-full h-full bg-gray-900 p-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white">&ROMEDA Menu</h2>
+                <button id="mobile-menu-close-btn" class="p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                    <span class="sr-only">Close menu</span>
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="mt-8 flex flex-col space-y-4">
+                <a href="#" class="nav-link text-lg text-gray-300 hover:text-cyan-400" data-page="home">HOME</a>
+                <a href="#" class="nav-link text-lg text-gray-300 hover:text-cyan-400" data-page="events">EVENTS</a>
+                <a href="#" class="nav-link text-lg text-gray-300 hover:text-cyan-400" data-page="members">MEMBERS</a>
+                <a href="https://www.youtube.com/@romeda0225/" target="_blank" rel="noopener noreferrer" class="text-lg text-gray-300 hover:text-cyan-400">YOUTUBE</a>
+                <a href="https://romedadb.notion.site/homepage" target="_blank" rel="noopener noreferrer" class="text-lg text-gray-300 hover:text-cyan-400">WIKI</a>
+                <a href="https://x.com/romeda_0225" target="_blank" rel="noopener noreferrer" class="text-lg text-gray-300 hover:text-cyan-400">TWITTER</a>
+                 <a href="https://discord.gg/gnKmAPddN6" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-cyan-500 hover:bg-cyan-600 text-black font-bold py-2 px-4 rounded-lg transition duration-300 text-center">
+                    JOIN
+                </a>
+            </nav>
+        </div>
+    </div>
+
 
     <!-- ページコンテナ -->
     <main class="container mx-auto px-4 py-16">
@@ -210,6 +250,9 @@
     </footer>
 
 <script>
+    const mobileMenuOpenBtn = document.getElementById('mobile-menu-open-btn');
+    const mobileMenuCloseBtn = document.getElementById('mobile-menu-close-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
     const navLinks = document.querySelectorAll('.nav-link');
     const pages = document.querySelectorAll('.page');
     const transitionOverlay = document.getElementById('transition-overlay');
@@ -221,10 +264,23 @@
             initialPage.classList.add('is-visible');
         }, 500);
     });
+
+    mobileMenuOpenBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('hidden');
+    });
+
+    mobileMenuCloseBtn.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+    });
     
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
+
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+
             const pageId = link.getAttribute('data-page');
             const targetPage = document.getElementById(pageId);
 
